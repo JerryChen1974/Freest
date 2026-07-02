@@ -1,0 +1,29 @@
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved.backup
+
+# Xcode (in case the package is opened in Xcode)
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+.DS_Store
+
+# Build output of scripts/build-app.sh (Increment 4)
+Freest.app/
+dist/
+
+# Downloaded ML models must never be committed. They live in
+# ~/Library/Application Support/Freest/models/ at runtime; any stray in-repo
+# copy is ignored here as a safety net.
+models/
+*.mlmodelc/
+*.mlpackage/
+
+# Local runtime config (should never be in the repo)
+config.json
+
+# Editor / OS cruft
+*.swp
+.idea/
+.vscode/
