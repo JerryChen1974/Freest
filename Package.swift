@@ -17,7 +17,8 @@ let package = Package(
         .library(name: "FreestCore", targets: ["FreestCore"]),
         .library(name: "FreestStorage", targets: ["FreestStorage"]),
         .library(name: "FreestAudio", targets: ["FreestAudio"]),
-        .library(name: "FreestASR", targets: ["FreestASR"])
+        .library(name: "FreestASR", targets: ["FreestASR"]),
+        .library(name: "FreestRefine", targets: ["FreestRefine"])
     ],
     dependencies: [
         .package(url: "https://github.com/argmaxinc/WhisperKit.git", exact: "0.18.0")
@@ -77,6 +78,20 @@ let package = Package(
         .testTarget(
             name: "FreestASRTests",
             dependencies: ["FreestASR", "FreestCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .target(
+            name: "FreestRefine",
+            dependencies: ["FreestCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .testTarget(
+            name: "FreestRefineTests",
+            dependencies: ["FreestRefine", "FreestCore"],
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
