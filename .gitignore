@@ -27,3 +27,6 @@ config.json
 *.swp
 .idea/
 .vscode/
+
+# Local planning docs (reference Vox / Amazon-internal details — never publish)
+plans/
