@@ -30,3 +30,6 @@ config.json
 
 # Local planning docs (reference Vox / Amazon-internal details — never publish)
 plans/
+
+# Local dev tooling (Playwright MCP for browser testing) — not part of the product
+.mcp.json
