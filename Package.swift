@@ -14,9 +14,14 @@ let package = Package(
         .macOS(.v14)
     ],
     products: [
-        .library(name: "FreestCore", targets: ["FreestCore"])
+        .library(name: "FreestCore", targets: ["FreestCore"]),
+        .library(name: "FreestStorage", targets: ["FreestStorage"]),
+        .library(name: "FreestAudio", targets: ["FreestAudio"]),
+        .library(name: "FreestASR", targets: ["FreestASR"])
     ],
-    dependencies: [],
+    dependencies: [
+        .package(url: "https://github.com/argmaxinc/WhisperKit.git", exact: "0.18.0")
+    ],
     targets: [
         .target(
             name: "FreestCore",
@@ -27,6 +32,51 @@ let package = Package(
         .testTarget(
             name: "FreestCoreTests",
             dependencies: ["FreestCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .target(
+            name: "FreestStorage",
+            dependencies: ["FreestCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .testTarget(
+            name: "FreestStorageTests",
+            dependencies: ["FreestStorage", "FreestCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .target(
+            name: "FreestAudio",
+            dependencies: ["FreestCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .testTarget(
+            name: "FreestAudioTests",
+            dependencies: ["FreestAudio", "FreestCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .target(
+            name: "FreestASR",
+            dependencies: [
+                "FreestCore",
+                .product(name: "WhisperKit", package: "WhisperKit")
+            ],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .testTarget(
+            name: "FreestASRTests",
+            dependencies: ["FreestASR", "FreestCore"],
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]

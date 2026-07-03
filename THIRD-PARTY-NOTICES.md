@@ -4,10 +4,10 @@ Freest bundles and/or depends on the following third-party components. Each is
 distributed under its own license, reproduced or referenced below. Freest does
 not relicense any of these; they remain under their original terms.
 
-> Note: The full dependency set (including transitive dependencies) is finalized
-> in later increments as the ASR and hotkey modules are added. This file is kept
-> in sync with `Package.resolved` and updated whenever a dependency is added or
-> its version changes.
+> This file is kept in sync with `Package.resolved` and updated whenever a
+> dependency is added or its version changes. The KeyboardShortcuts dependency
+> is added in a later increment (the menu-bar app), so its transitive set will
+> be reconciled here at that time.
 
 ---
 
@@ -22,13 +22,19 @@ text is included in this repository at [`LICENSE`](LICENSE).
 
 ### WhisperKit transitive dependencies
 
-- **swift-transformers** — Apache License 2.0 — https://github.com/huggingface/swift-transformers
-- **swift-argument-parser** — Apache License 2.0 — https://github.com/apple/swift-argument-parser
-  (pulled in transitively; Freest itself does not use it directly)
+Resolved from `Package.resolved` (WhisperKit 0.18.0). Freest depends on none of
+these directly; they are pulled in through WhisperKit. Each keeps its own
+license.
 
-> These transitive components are enumerated precisely from `Package.resolved`
-> once WhisperKit is wired in (Increment 2). Any additional transitive licenses
-> will be added here at that time.
+| Component | Version | License | Project |
+|---|---|---|---|
+| swift-transformers | 1.1.9 | Apache-2.0 | https://github.com/huggingface/swift-transformers |
+| swift-jinja | 2.3.6 | Apache-2.0 | https://github.com/huggingface/swift-jinja |
+| swift-argument-parser | 1.8.2 | Apache-2.0 | https://github.com/apple/swift-argument-parser |
+| swift-crypto | 4.5.0 | Apache-2.0 | https://github.com/apple/swift-crypto |
+| swift-asn1 | 1.7.1 | Apache-2.0 | https://github.com/apple/swift-asn1 |
+| swift-collections | 1.6.0 | Apache-2.0 | https://github.com/apple/swift-collections |
+| yyjson | 0.12.0 | MIT | https://github.com/ibireme/yyjson |
 
 ---
 
