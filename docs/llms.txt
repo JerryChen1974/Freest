@@ -1,0 +1,112 @@
+# Freest — setup guide for AI agents
+
+> Freest is a free, fully offline voice-dictation app for the macOS menu bar.
+> Hold the hotkey ⌃⌥D (Control-Option-D), speak, release, and Freest transcribes
+> your speech on-device and pastes the text at the cursor. No accounts, no cloud,
+> no API keys. Open source under Apache-2.0.
+>
+> This file is written for an AI coding agent to read and execute. Follow the
+> steps in order. Everything is local to the user's Mac; the only network use is
+> a one-time speech-model download.
+
+## Facts
+
+- Repository: https://github.com/JerryChen1974/Freest
+- Language/build: Swift 6, Swift Package Manager (SwiftPM).
+- Platform: macOS 14 (Sonoma) or later. Apple Silicon is required ONLY for the
+  optional "Apple Intelligence" refinement mode (macOS 26+); every other feature
+  works on any supported Mac, Intel or Apple Silicon.
+- Default dictation hotkey: Control-Option-D, written ⌃⌥D. Configurable in Settings.
+- Default speech model: `base` (downloaded once, then used offline).
+- License: Apache-2.0.
+
+## Prerequisites to check first
+
+1. Confirm macOS version is 14.0 or newer:
+   `sw_vers -productVersion`
+2. Confirm the Swift toolchain is present:
+   `swift --version`
+   - If missing, install the Xcode Command Line Tools: `xcode-select --install`
+   - A full Xcode is NOT required to build or run the app. (It is only needed to
+     run the unit test suite via `swift test`; `scripts/test.sh` handles the
+     Command Line Tools case. Testing is optional for end users.)
+3. Confirm `git` is available: `git --version`
+
+## Setup steps
+
+### Step 1 — Clone and build the app
+
+```sh
+git clone https://github.com/JerryChen1974/Freest.git
+cd Freest
+scripts/build-app.sh
+```
+
+`scripts/build-app.sh` compiles a release build, assembles `Freest.app`, and
+ad-hoc code-signs it. On success it prints the path to `Freest.app` in the repo
+root. If the script is not executable, run `chmod +x scripts/build-app.sh` first.
+
+### Step 2 — Launch the app
+
+```sh
+open Freest.app
+```
+
+Freest runs as a menu-bar app (a small waveform icon in the top-right menu bar).
+It intentionally has NO Dock icon and NO main window.
+
+### Step 3 — Grant permissions (first launch only)
+
+Freest needs two macOS permissions. It will prompt on first use:
+
+- Microphone — so it can hear you. (System Settings ▸ Privacy & Security ▸ Microphone)
+- Accessibility — so it can paste text at the cursor in other apps.
+  (System Settings ▸ Privacy & Security ▸ Accessibility)
+
+Guide the user to approve both. If a prompt was dismissed, they can enable Freest
+manually in the panes above.
+
+### Step 4 — Download the speech model (one time)
+
+Open the menu-bar dropdown and choose "Download model (base)". This is the only
+step that uses the network. When it finishes, the menu shows "Model ready: base"
+and Freest is fully offline from then on.
+
+### Step 5 — Verify dictation works
+
+1. Focus any text field (e.g. open TextEdit and create a new document).
+2. Hold **⌃⌥D** (Control-Option-D).
+3. Say a short sentence, e.g. "testing one two three".
+4. Release the keys.
+5. Confirm the transcribed text is pasted at the cursor.
+
+If text appears, setup is complete.
+
+## Settings the user can change
+
+- Dictation hotkey (default ⌃⌥D).
+- Speech model: tiny / base / small / medium / large-v3 (bigger = more accurate,
+  slower, larger download).
+- Refinement mode:
+  - Off — paste the raw transcription.
+  - Tidy — local rule-based cleanup (trim, collapse spaces, sentence casing,
+    terminal punctuation, drop leading filler words). Offline, no model.
+  - Apple Intelligence — on-device LLM cleanup (macOS 26+, Apple Silicon);
+    automatically falls back to Tidy where unavailable.
+- Input device, paste-at-cursor, and press-Return-after-paste toggles.
+
+## Troubleshooting
+
+- Build fails with "no such module 'Testing'": that only affects `swift test`,
+  not the app build. Use `scripts/test.sh`, or ignore — tests are optional.
+- Hotkey does nothing: confirm Accessibility permission is granted, and that the
+  model shows "ready" in the menu bar.
+- "Model not ready": complete Step 4 (download the base model) before dictating.
+- Nothing is pasted but the pill shows it heard you: check Accessibility trust.
+
+## Success criteria
+
+- `Freest.app` launches and shows a menu-bar icon.
+- Microphone and Accessibility permissions are granted.
+- The `base` model shows as ready.
+- Holding ⌃⌥D, speaking, and releasing pastes text at the cursor.

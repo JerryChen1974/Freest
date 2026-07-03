@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<!--
+  SPDX-License-Identifier: Apache-2.0
+  Copyright 2026 Jerry Chen
+
+  Freest landing page. Hand-written, self-contained (inline CSS, no build step,
+  no third-party template code). The visual language — dark indigo canvas,
+  indigo→blue gradient accents, centered hero, pill buttons, clean feature grid,
+  monospace panels — is an original implementation inspired by common modern
+  dev-tool landing pages. All content is Freest-specific and self-contained.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Freest — talk, and it types. Offline voice dictation for macOS.</title>
+<meta name="description" content="Freest is a free, fully offline voice-dictation app for the macOS menu bar. Hold ⌃⌥D, speak, and your words are typed at the cursor. No accounts, no cloud, no API keys. Open source (Apache-2.0)." />
+
+<!-- Open Graph / social -->
+<meta property="og:title" content="Freest — offline voice dictation for macOS" />
+<meta property="og:description" content="Hold ⌃⌥D, speak, and your words appear at the cursor. Fully offline. Open source." />
+<meta property="og:type" content="website" />
+
+<!-- Pointer for AI agents: a machine-readable setup guide lives here. -->
+<link rel="alternate" type="text/plain" href="./llms.txt" title="Freest setup for AI agents" />
+
+<style>
+  :root {
+    --bg:        #0b0b14;
+    --bg-2:      #10111b;
+    --panel:     #161826;
+    --border:    #262a3d;
+    --text:      #f1f5f9;
+    --muted:     #99a1b3;
+    --accent:    #6366f1;
+    --accent-2:  #3b82f6;
+    --accent-3:  #8b5cf6;
+    --radius:    14px;
+    --maxw:      1080px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    /* subtle radial indigo glow behind the top of the page */
+    background-image:
+      radial-gradient(60rem 40rem at 50% -10rem, rgba(99,102,241,0.18), transparent 60%),
+      radial-gradient(40rem 30rem at 90% 10rem, rgba(59,130,246,0.10), transparent 60%);
+    background-repeat: no-repeat;
+  }
+
+  a { color: inherit; }
+
+  .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- nav ---------- */
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(10px);
+    background: rgba(11,11,20,0.72);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; letter-spacing: -0.01em; }
+  .brand .dot {
+    width: 22px; height: 22px; border-radius: 7px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 0 20px rgba(99,102,241,0.6);
+  }
+  .nav-links { display: flex; align-items: center; gap: 22px; font-size: 15px; color: var(--muted); }
+  .nav-links a { text-decoration: none; transition: color .15s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: 999px;
+    font-weight: 600; font-size: 15px; text-decoration: none;
+    border: 1px solid transparent; cursor: pointer; transition: transform .12s, box-shadow .15s, background .15s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff; box-shadow: 0 8px 30px rgba(99,102,241,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 38px rgba(99,102,241,0.5); }
+  .btn-ghost { background: rgba(255,255,255,0.04); border-color: var(--border); color: var(--text); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.09); }
+
+  /* ---------- hero ---------- */
+  .hero { text-align: center; padding: 84px 0 56px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 999px; font-size: 13px; color: var(--muted);
+    border: 1px solid var(--border); background: rgba(255,255,255,0.03); margin-bottom: 26px;
+  }
+  .pill .glow { width: 8px; height: 8px; border-radius: 50%; background: #34d399; box-shadow: 0 0 10px #34d399; }
+  h1 {
+    font-size: clamp(40px, 7vw, 68px); line-height: 1.03; letter-spacing: -0.03em;
+    margin: 0 0 20px; font-weight: 800;
+  }
+  h1 .grad {
+    background: linear-gradient(120deg, var(--accent-3), var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lede { font-size: clamp(17px, 2.4vw, 21px); color: var(--muted); max-width: 640px; margin: 0 auto 34px; }
+  .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* keycap */
+  .keycap {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-weight: 700; font-size: 15px;
+    padding: 10px 16px; border-radius: 10px; color: var(--text);
+    background: linear-gradient(180deg, #1c1f30, #14161f);
+    border: 1px solid var(--border);
+    box-shadow: 0 3px 0 var(--border), 0 6px 14px rgba(0,0,0,0.4);
+  }
+
+  /* ---------- the hotkey banner ---------- */
+  .hotkey {
+    margin: 48px auto 0; max-width: 760px;
+    background: linear-gradient(160deg, rgba(99,102,241,0.14), rgba(59,130,246,0.06));
+    border: 1px solid var(--border); border-radius: 20px; padding: 34px 28px; text-align: center;
+  }
+  .hotkey h2 { margin: 0 0 8px; font-size: 15px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 700; }
+  .keys { display: flex; gap: 12px; justify-content: center; align-items: center; margin: 14px 0 10px; flex-wrap: wrap; }
+  .bigkey {
+    font-family: var(--mono); font-weight: 800; font-size: clamp(28px, 6vw, 44px);
+    padding: 14px 22px; border-radius: 14px; min-width: 64px;
+    background: linear-gradient(180deg, #20233a, #14161f);
+    border: 1px solid #33385a; box-shadow: 0 5px 0 #2a2f4d, 0 14px 30px rgba(0,0,0,0.5);
+  }
+  .plus { color: var(--muted); font-size: 26px; font-weight: 700; }
+  .hotkey p { color: var(--muted); margin: 12px 0 0; font-size: 16px; }
+  .hotkey b { color: var(--text); }
+
+  /* ---------- sections ---------- */
+  section { padding: 72px 0; }
+  .section-head { text-align: center; max-width: 620px; margin: 0 auto 46px; }
+  .section-head h2 { font-size: clamp(28px, 4.5vw, 40px); letter-spacing: -0.02em; margin: 0 0 12px; }
+  .section-head p { color: var(--muted); font-size: 17px; margin: 0; }
+  .eyebrow { color: var(--accent); font-weight: 700; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; }
+
+  /* feature grid */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 26px; transition: transform .15s, border-color .15s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: #34395a; }
+  .card .ic {
+    width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; font-size: 20px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(59,130,246,0.15));
+    border: 1px solid var(--border); margin-bottom: 16px;
+  }
+  .card h3 { margin: 0 0 8px; font-size: 18px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  /* steps */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: step; }
+  .step { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; position: relative; }
+  .step .n {
+    width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; margin-bottom: 14px;
+  }
+  .step h3 { margin: 0 0 6px; font-size: 16px; }
+  .step p { margin: 0; color: var(--muted); font-size: 14px; }
+  .step code { font-family: var(--mono); color: #c7d2fe; font-size: 13px; }
+
+  /* ---------- agent block ---------- */
+  .agent { max-width: 860px; margin: 0 auto; }
+  .codepanel {
+    background: #0d0e17; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  }
+  .codepanel .bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: #12131f; }
+  .codepanel .bar .d { width: 12px; height: 12px; border-radius: 50%; }
+  .codepanel .bar .t { margin-left: 10px; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+  .codepanel pre {
+    margin: 0; padding: 20px; overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.7; color: #d7def0;
+  }
+  .codepanel pre .c { color: #6b7280; }
+  .codepanel pre .k { color: #93c5fd; }
+  .copybtn {
+    margin-top: 16px; display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 999px; border: 1px solid var(--border);
+    background: rgba(255,255,255,0.04); color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s;
+  }
+  .copybtn:hover { background: rgba(255,255,255,0.09); }
+
+  .prompt-box {
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px 22px; margin-bottom: 22px;
+  }
+  .prompt-box .label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; font-weight: 700; margin-bottom: 10px; }
+  .prompt-box p { margin: 0; font-family: var(--mono); font-size: 14px; color: #e5e9f5; line-height: 1.6; }
+
+  /* ---------- footer ---------- */
+  footer { border-top: 1px solid var(--border); padding: 40px 0; color: var(--muted); font-size: 14px; }
+  .foot-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  .foot-inner a { color: var(--muted); text-decoration: none; margin-left: 18px; }
+  .foot-inner a:hover { color: var(--text); }
+
+  /* responsive */
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .nav-links a.hide-sm { display: none; }
+  }
+  @media (max-width: 520px) {
+    .steps { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <div class="brand"><span class="dot"></span> Freest</div>
+    <nav class="nav-links">
+      <a href="#how" class="hide-sm">How it works</a>
+      <a href="#features" class="hide-sm">Features</a>
+      <a href="#agent">For AI agents</a>
+      <a href="https://github.com/JerryChen1974/Freest" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <span class="pill"><span class="glow"></span> 100% offline · open source · macOS</span>
+    <h1>Talk. And it <span class="grad">types.</span></h1>
+    <p class="lede">
+      Freest is a free, fully offline voice-dictation app for the macOS menu bar.
+      Hold one hotkey, speak, and your words are typed right at the cursor —
+      in any app. No accounts, no cloud, no API keys.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#how">Get started →</a>
+      <a class="btn btn-ghost" href="#agent">Set it up with your AI agent</a>
+    </div>
+
+    <!-- THE KEY -->
+    <div class="hotkey">
+      <h2>One key to dictate</h2>
+      <div class="keys">
+        <span class="bigkey">⌃</span><span class="plus">+</span>
+        <span class="bigkey">⌥</span><span class="plus">+</span>
+        <span class="bigkey">D</span>
+      </div>
+      <p><b>Hold&nbsp;⌃⌥D</b> (Control-Option-D), speak, then release. Freest transcribes on-device and pastes the text at your cursor. That’s the whole thing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Get started</span>
+      <h2>Up and running in four steps</h2>
+      <p>Freest is a small Swift app you build once. After that it lives in your menu bar.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <h3>Install</h3>
+        <p>Clone the repo and run <code>scripts/build-app.sh</code> to produce <code>Freest.app</code>. Requires macOS 14+.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h3>Grant access</h3>
+        <p>On first launch, allow <b>Microphone</b> (to hear you) and <b>Accessibility</b> (to type at the cursor).</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h3>Get the model</h3>
+        <p>Download the default <code>base</code> speech model once. After that, everything runs offline.</p>
+      </div>
+      <div class="step">
+        <div class="n">4</div>
+        <h3>Press ⌃⌥D</h3>
+        <p>Hold the hotkey, speak, release. Your words appear wherever your cursor is.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" style="background: var(--bg-2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Why Freest</span>
+      <h2>Private by design</h2>
+      <p>Nothing you say leaves your Mac. The only time Freest touches the network is the one-time model download.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="ic">🔒</div>
+        <h3>Fully offline</h3>
+        <p>Recording, transcription, and cleanup all happen on-device. No accounts, no API keys, no telemetry.</p>
+      </div>
+      <div class="card">
+        <div class="ic">⌨️</div>
+        <h3>One-key dictation</h3>
+        <p>Hold ⌃⌥D and talk. It pastes at the cursor in any app. Change the hotkey anytime in Settings.</p>
+      </div>
+      <div class="card">
+        <div class="ic">✨</div>
+        <h3>Smart cleanup</h3>
+        <p>Optional local tidy-up fixes casing, punctuation, and filler words — or use on-device Apple Intelligence.</p>
+      </div>
+      <div class="card">
+        <div class="ic">🎯</div>
+        <h3>Menu-bar native</h3>
+        <p>Lives quietly in the menu bar. No Dock icon, no windows in your way — just there when you need it.</p>
+      </div>
+      <div class="card">
+        <div class="ic">🤖</div>
+        <h3>Agent-friendly setup</h3>
+        <p>Point your AI coding agent at this page and it can install and configure Freest for you end to end.</p>
+      </div>
+      <div class="card">
+        <div class="ic">📖</div>
+        <h3>Open source</h3>
+        <p>Apache-2.0 licensed. Read every line, build it yourself, make it your own.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR AI AGENTS -->
+<section id="agent">
+  <div class="wrap agent">
+    <div class="section-head">
+      <span class="eyebrow">For AI agents</span>
+      <h2>Let your agent set it up</h2>
+      <p>Copy the prompt below into Claude Code, Cursor, or any coding agent. It points the agent at the machine-readable setup guide.</p>
+    </div>
+
+    <div class="prompt-box">
+      <div class="label">Copy-paste this to your AI agent</div>
+      <p id="agentPrompt">Set up Freest (offline macOS voice dictation) on my Mac. Read the setup guide at https://jerrychen1974.github.io/Freest/llms.txt and follow it: clone https://github.com/JerryChen1974/Freest, build the app with scripts/build-app.sh, help me grant Microphone + Accessibility permissions, download the default speech model, and confirm the ⌃⌥D dictation hotkey works.</p>
+    </div>
+    <button class="copybtn" onclick="copyPrompt()">📋 <span id="copyLabel">Copy prompt</span></button>
+
+    <div style="height:26px"></div>
+
+    <div class="codepanel">
+      <div class="bar">
+        <span class="d" style="background:#ff5f57"></span>
+        <span class="d" style="background:#febc2e"></span>
+        <span class="d" style="background:#28c840"></span>
+        <span class="t">manual setup — Terminal</span>
+      </div>
+<pre><span class="c"># 1. Clone and build the app</span>
+git clone https://github.com/JerryChen1974/Freest.git
+<span class="k">cd</span> Freest
+scripts/build-app.sh          <span class="c"># builds & signs Freest.app</span>
+<span class="k">open</span> Freest.app
+
+<span class="c"># 2. On first launch, grant Microphone + Accessibility</span>
+<span class="c">#    when macOS prompts (needed to hear you and type for you).</span>
+
+<span class="c"># 3. Download the default "base" model from the menu bar (one time).</span>
+
+<span class="c"># 4. Hold ⌃⌥D, speak, release — your words paste at the cursor.</span>
+</pre>
+    </div>
+
+    <p style="color:var(--muted); font-size:14px; margin-top:18px; text-align:center;">
+      Full machine-readable instructions: <a href="./llms.txt" style="color:#c7d2fe;">llms.txt</a>
+      &nbsp;·&nbsp; <a href="./SETUP.md" style="color:#c7d2fe;">SETUP.md</a>
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap foot-inner">
+    <div>© 2026 Jerry Chen · Freest · Apache-2.0</div>
+    <div>
+      <a href="https://github.com/JerryChen1974/Freest" target="_blank" rel="noopener">GitHub</a>
+      <a href="./llms.txt">llms.txt</a>
+      <a href="#how">Get started</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function copyPrompt() {
+    var text = document.getElementById('agentPrompt').innerText;
+    navigator.clipboard.writeText(text).then(function () {
+      var l = document.getElementById('copyLabel');
+      l.textContent = 'Copied!';
+      setTimeout(function () { l.textContent = 'Copy prompt'; }, 1800);
+    });
+  }
+</script>
+</body>
+</html>
