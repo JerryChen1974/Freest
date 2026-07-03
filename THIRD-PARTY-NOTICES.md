@@ -5,9 +5,11 @@ distributed under its own license, reproduced or referenced below. Freest does
 not relicense any of these; they remain under their original terms.
 
 > This file is kept in sync with `Package.resolved` and updated whenever a
-> dependency is added or its version changes. The KeyboardShortcuts dependency
-> is added in a later increment (the menu-bar app), so its transitive set will
-> be reconciled here at that time.
+> dependency is added or its version changes. Freest pins KeyboardShortcuts to
+> the 1.15.x line (`>=1.10.0, <1.16.0`) because 1.16.0+ uses the `#Preview`
+> macro, whose `PreviewsMacros` plugin ships only with a full Xcode toolchain
+> (not the Command Line Tools). KeyboardShortcuts has no third-party transitive
+> dependencies of its own.
 
 ---
 
@@ -41,6 +43,7 @@ license.
 ## KeyboardShortcuts
 
 - **Purpose:** User-recordable global keyboard shortcuts on macOS.
+- **Version:** 1.15.0 (pinned `>=1.10.0, <1.16.0`; see note above)
 - **License:** MIT License
 - **Project:** https://github.com/sindresorhus/KeyboardShortcuts
 

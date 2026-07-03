@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleName</key>
+	<string>Freest</string>
+	<key>CFBundleDisplayName</key>
+	<string>Freest</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.jerrychen.freest</string>
+	<key>CFBundleExecutable</key>
+	<string>Freest</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>14.0</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Freest records from the microphone only while you hold the dictation hotkey, to transcribe your speech on-device.</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright 2026 Jerry Chen. Licensed under the Apache License, Version 2.0.</string>
+</dict>
+</plist>

@@ -18,10 +18,16 @@ let package = Package(
         .library(name: "FreestStorage", targets: ["FreestStorage"]),
         .library(name: "FreestAudio", targets: ["FreestAudio"]),
         .library(name: "FreestASR", targets: ["FreestASR"]),
-        .library(name: "FreestRefine", targets: ["FreestRefine"])
+        .library(name: "FreestRefine", targets: ["FreestRefine"]),
+        .executable(name: "Freest", targets: ["FreestApp"])
     ],
     dependencies: [
-        .package(url: "https://github.com/argmaxinc/WhisperKit.git", exact: "0.18.0")
+        .package(url: "https://github.com/argmaxinc/WhisperKit.git", exact: "0.18.0"),
+        // Pinned below 1.16.0: from that release KeyboardShortcuts' Recorder.swift
+        // uses the #Preview macro, whose PreviewsMacros plugin ships only with a
+        // full Xcode toolchain (not the Command Line Tools). 1.15.x exposes the
+        // same Name/Recorder/Shortcut/onKeyDown API Freest uses.
+        .package(url: "https://github.com/sindresorhus/KeyboardShortcuts.git", "1.10.0" ..< "1.16.0")
     ],
     targets: [
         .target(
@@ -92,6 +98,67 @@ let package = Package(
         .testTarget(
             name: "FreestRefineTests",
             dependencies: ["FreestRefine", "FreestCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .target(
+            name: "FreestOutput",
+            dependencies: ["FreestCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .target(
+            name: "FreestPermissions",
+            dependencies: ["FreestCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .target(
+            name: "FreestHotkey",
+            dependencies: [
+                "FreestCore",
+                .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts")
+            ],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .target(
+            name: "FreestIndicator",
+            dependencies: ["FreestCore"],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .target(
+            name: "FreestUI",
+            dependencies: [
+                "FreestCore",
+                "FreestASR",
+                .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts")
+            ],
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
+        ),
+        .executableTarget(
+            name: "FreestApp",
+            dependencies: [
+                "FreestCore",
+                "FreestAudio",
+                "FreestASR",
+                "FreestRefine",
+                "FreestStorage",
+                "FreestOutput",
+                "FreestPermissions",
+                "FreestHotkey",
+                "FreestIndicator",
+                "FreestUI",
+                .product(name: "KeyboardShortcuts", package: "KeyboardShortcuts")
+            ],
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
